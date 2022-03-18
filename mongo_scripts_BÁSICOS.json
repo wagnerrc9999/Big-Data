@@ -1,0 +1,87 @@
+######################################################################
+######################################################################
+#Instalação
+sudo yum install -y mongodb-org
+#Inicia serviço:
+sudo service mongod start
+#Inicia Shell
+mongo
+
+#Para ver qual Banco de Dados estamos usando.
+db
+
+#para mostrar os Banco De Dados existentes
+show dbs
+
+#criando um Banco De Dados
+use NOME_DO_NOVO_BANCO_DE_DADOS;
+
+#Insere um único cliente
+db.clientes.insert({nome:"NOME_DO_CLIENTE",sobrenome:"DO_CLIENTE", idade:29})
+
+#Insere multiplos documentos
+db.clientes.insert([{nome:"NOME_DO_CLIENTE_A",sobrenome:"SOBRENOME_DO_CLIENTE", idade:26},
+{nome:"NOME_DO_CLIENTE_B",sobrenome:"SOBRENOME_DO_CLIENTE", idade:57},
+{nome:"NOME_DO_CLIENTE_C",sobrenome:"SOBRENOME_DO_CLIENTE", idade:22}])
+
+#Encontra todos
+db.clientes.find()
+
+#Encontra com pretty
+db.clientes.find().pretty()
+
+#Retorna apenas o primeiro
+db.clientes.findOne()
+
+#ler documento especifico
+db.clientes.find({nome:"NOME_DO_CLIENTE_C"})
+
+#cliente com sobrenome rocha e idade menor ou igual a 12
+db.clientes.find({sobrenome:"Rocha",idade: {$lte: 12}})
+
+#sobrenome rocha ou maria
+db.clientes.find({$or:[{sobrenome:"NOME_DO_CLIENTE_C"},{nome: "NOME_DO_CLIENTE_A"}]})
+
+#projeção, sem id
+db.clientes.find({sobrenome : "NOME_DO_CLIENTE_C"},{id: 0})
+
+#sem nome e sobrenome
+db.clientes.find({sobrenome : "NOME_DO_CLIENTE_E"},{sobrenome: 0, idade: 0})
+
+#só o nome
+db.clientes.find({sobrenome : "NOME_DO_CLIENTE_S"},{nome: 1})
+
+#limite de resultados
+db.clientes.find().limit(2)
+
+#ordenar crescente
+db.clientes.find().sort({nome:1})
+
+#ordenar decrescente
+db.clientes.find().sort({nome:-1})
+
+#atualizar cliente
+db.clientes.find({nome:"Pedro"})
+db.clientes.update({nome:"Pedro"},{$set:{idade:29}})
+
+#excluir coleção
+db.clientes.drop()
+
+#testa a exclusão
+db.clientes.drop()
+
+#FAZENDO BACKUP EM AMBIENTES WINDOWS
+C:\Program Files\MongoDB\Server\4.0\bin>mongodump --db=dbvendas /out:c:/dump
+
+#EXCLUINDO O BANCO DE DADOS
+db.dropDatabase()
+
+#FAZENDO A RESTAURAÇÃO backup
+mongorestore /dir:C:\dump\dbvendas /db:dbvendas
+
+#iMPORTANDO DADOS JSON
+mongoimport --db dbvendas2 --collection vendas --file C:\Users\webma\Desktop\vendas.json
+
+#EXPORTANDO DADOS
+mongoexport --db dbvendas2 --collection vendas /out:C:\Users\webma\Desktop\vendas.json
+
